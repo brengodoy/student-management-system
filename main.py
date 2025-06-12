@@ -47,6 +47,10 @@ class Course():
         print("The students registered in this course are:")
         for student in self.students_registered:
             print(student.full_name)
+            
+    def __str__(self):
+        students_str = "\n".join([student.full_name for student in self.students_registered])
+        return (f'Course name: {self.name}\nCourse code: {self.code}\nThe students registered in this course are:\n{students_str}')
          
     def show_average_grade_course(self):
         count = 0
@@ -92,7 +96,8 @@ student1.enroll_in_course(course2)
 #course1.show_course_data()
 #print(" ")
 #student1.show_student_data()
-print(student1)
+#print(student1)
+print(course1)
 grade1 = Grade(student1,course1,10)
 grade3 = Grade(student2,course1,9)
 grade2 = Grade(student1,course2,7)
