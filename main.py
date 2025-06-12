@@ -19,7 +19,7 @@ class Student():
         print("All the grades of this student are: ")
         for grade in all_grades:
             for course in self.courses:
-                if grade.student.full_name == self.full_name and course.name == grade.course.name:
+                if grade.student == self and course.code == grade.course.code:
                     print("Course: " + course.name)
                     print("Grade: " + str(grade.grade))
                     
@@ -28,11 +28,14 @@ class Student():
         total = 0
         for grade in all_grades:
             for course in self.courses:
-                if grade.student.full_name == self.full_name and course.name == grade.course.name:
+                if grade.student == self and course.code == grade.course.code:
                     total += grade.grade
                     count += 1
-        avg = total / count
-        print("Grade average is: " + str(avg))
+        if count == 0:
+            print("No grades available.")
+        else:
+            avg = total / count
+            print("Grade average is: " + str(avg))
         
 class Course():
     def __init__(self,name,code):
@@ -52,7 +55,7 @@ class Course():
         count = 0
         total = 0
         for grade in all_grades:
-            if grade.course.name == self.name:
+            if grade.course == self:
                 total += grade.grade
                 count += 1
         avg = total / count
