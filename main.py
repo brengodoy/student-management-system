@@ -40,13 +40,6 @@ class Course():
         self.code = code
         self.students_registered = []
         self.teacher = None
-        
-    def show_course_data(self):
-        print("Course name: " + self.name)
-        print("Course code: " + str(self.code))
-        print("The students registered in this course are:")
-        for student in self.students_registered:
-            print(student.full_name)
             
     def __str__(self):
         students_str = "\n".join([student.full_name for student in self.students_registered])
