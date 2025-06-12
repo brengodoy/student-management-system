@@ -7,13 +7,10 @@ class Student():
     def enroll_in_course(self,course):
         self.courses.append(course)
         course.students_registered.append(self)
-        
-    def show_student_data(self):
-        print("Student's name: " + self.full_name)
-        print("Student's ID: " + str(self.student_id))
-        print("This student is registered in:")
-        for course in self.courses:
-            print(course.name)
+            
+    def __str__(self):
+        courses_str = "\n".join([course.name for course in self.courses])
+        return (f"Student's name: {self.full_name}\nStudent's ID: {self.student_id}\nThis student is registered in:\n{courses_str}")
             
     def show_all_grades(self):
         print("All the grades of this student are: ")
@@ -92,15 +89,16 @@ student2 = Student("Federico Zurita",34721292)
 student1.enroll_in_course(course1)
 student2.enroll_in_course(course1)
 student1.enroll_in_course(course2)
-course1.show_course_data()
-print(" ")
-student1.show_student_data()
+#course1.show_course_data()
+#print(" ")
+#student1.show_student_data()
+print(student1)
 grade1 = Grade(student1,course1,10)
 grade3 = Grade(student2,course1,9)
 grade2 = Grade(student1,course2,7)
 all_grades.append(grade1)
 all_grades.append(grade2)
 all_grades.append(grade3)
-student1.show_all_grades()
-student1.show_average_grade()
-course1.show_average_grade_course()
+# student1.show_all_grades()
+# student1.show_average_grade()
+# course1.show_average_grade_course()
