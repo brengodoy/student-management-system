@@ -9,8 +9,12 @@ class Student():
         course.students_registered.append(self)
             
     def __str__(self):
-        courses_str = "\n".join([course.name for course in self.courses])
-        return (f"Student's name: {self.full_name}\nStudent's ID: {self.student_id}\nThis student is registered in:\n{courses_str}")
+        if self.courses:
+            courses_str = '\n'.join([course.name for course in self.courses])
+            message = f"This student is registered in:\n{courses_str}" 
+        else:
+            message = "This student isn't registered in any courses."
+        return (f"Student's name: {self.full_name}\nStudent's ID: {self.student_id}\n{message}")
         
 class Course():
     def __init__(self,name,code):
@@ -20,8 +24,12 @@ class Course():
         self.teacher = None
             
     def __str__(self):
-        students_str = "\n".join([student.full_name for student in self.students_registered])
-        return (f'Course name: {self.name}\nCourse code: {self.code}\nThe students registered in this course are:\n{students_str}')
+        if self.students_registered:
+            students_str = "\n".join([student.full_name for student in self.students_registered])
+            message = f"The students registered in this course are:\n{students_str}"
+        else:
+            message = "There are no students registered in this course."
+        return (f'Course name: {self.name}\nCourse code: {self.code}\n{message}')
          
 class Teacher():
     def __init__(self,full_name,teacher_id):
@@ -34,8 +42,12 @@ class Teacher():
         course.teacher = self
             
     def __str__(self):
-        courses_str = "\n".join([course.name for course in self.courses])
-        return (f"Teacher's name: {self.full_name}\nTeacher's id: {self.teacher_id}\nThis teacher teaches in:\n{courses_str}")
+        if self.courses:
+            courses_str = "\n".join([course.name for course in self.courses])
+            message = f"This teacher teaches in:\n{courses_str}"
+        else:
+            message = "This teacher doesn't teaches in any courses yet."
+        return (f"Teacher's name: {self.full_name}\nTeacher's id: {self.teacher_id}\n{message}")
 
 class Grade():
     def __init__(self,student,course,grade):
@@ -46,7 +58,7 @@ class Grade():
     def __str__(self):
         return (f"Student: {self.student.full_name}\nCourse: {self.course.name}\nGrade: {self.grade}")
     
-class System():
+class SchoolSystem():
     def __init__(self):
         self.students = []
         self.courses = []
@@ -66,10 +78,16 @@ class System():
         self.grades.append(grade)
         
     def show_grades_for_student(self,student):
-        print(f"All the grades of {student.full_name} are: ")
+        grades_student = []
         for grade in self.grades:
             if grade.student == student:
+                grades_student.append(grade)
+        if grades_student:
+            print(f"All the grades of {student.full_name} are: ")
+            for grade in grades_student:
                 print(f'Course: {grade.course.name}. Grade: {str(grade.grade)}')
+        else:
+            print(f"There are no grades for {student.full_name} yet.")
                 
     def show_average_grade_for_student(self,student):
         count = 0
@@ -79,7 +97,7 @@ class System():
                 total += grade.grade
                 count += 1
         if count == 0:
-            print("No grades available.")
+            print(f"No grades available for {student.full_name}.")
         else:
             avg = total / count
             print(f"Grade average for {student.full_name} is: {str(avg)}")
@@ -91,5 +109,8 @@ class System():
             if grade.course == course:
                 total += grade.grade
                 count += 1
-        avg = total / count
-        print(f"Grade average for {course.name} is: {str(avg)}")
+        if count == 0:
+            print(f"No grades available for {course.name}.")
+        else:
+            avg = total / count
+            print(f"Grade average for {course.name} is: {str(avg)}")
