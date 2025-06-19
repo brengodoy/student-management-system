@@ -40,7 +40,12 @@ class Teacher(Person):
         return f"TEACHER'S INFO:\n{super().__str__()}"
     
     def register_course(self,course):
-        return super().register_course(course)
+        if course.teacher is None:
+            msg = super().register_course(course)
+            course.teacher = self
+        else:
+            msg = f"This course already has a teacher: {course.teacher.name}"
+        return msg
         
 class Course():
     def __init__(self,name,code):
@@ -79,10 +84,10 @@ class SchoolSystem():
         
     def create_student(self,name,identifier):
         student = Student(name,identifier)
-        self.add_student(student)
+        self._add_student(student)
         return student
         
-    def add_student(self,student):
+    def _add_student(self,student):
         if student not in self.students:
             self.students.append(student)
         else:
@@ -90,10 +95,10 @@ class SchoolSystem():
     
     def create_course(self,name,code):
         course = Course(name,code)
-        self.add_course(course)
+        self._add_course(course)
         return course        
     
-    def add_course(self,course):
+    def _add_course(self,course):
         if course not in self.courses:
             self.courses.append(course)
         else: 
@@ -101,10 +106,10 @@ class SchoolSystem():
         
     def create_teacher(self,name,identifier):
         teacher = Teacher(name,identifier)
-        self.add_teacher(teacher)
+        self._add_teacher(teacher)
         return teacher
         
-    def add_teacher(self,teacher):
+    def _add_teacher(self,teacher):
         if teacher not in self.teachers:
             self.teachers.append(teacher)
         else:
@@ -112,10 +117,10 @@ class SchoolSystem():
         
     def create_grade(self,student,course,grade):
         grade_var = Grade(student,course,grade)
-        self.add_grade(grade_var)
+        self._add_grade(grade_var)
         return grade_var
         
-    def add_grade(self,grade):
+    def _add_grade(self,grade):
         if grade not in self.grades:
             self.grades.append(grade)
         else:
