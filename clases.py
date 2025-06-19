@@ -1,24 +1,46 @@
-class Student():
-    def __init__(self,name,student_id):
+class Person():
+    def __init__(self,name,identifier):
         self.name = name
-        self.student_id = student_id
+        self.identifier = identifier
         self.courses = []
         
-    def enroll_in_course(self,course):
-        if course not in self.courses:
-            self.courses.append(course)
-            course.students_registered.append(self)
-            return f"Student {self.name} enrolled correctly in {course.name}."
-        else:
-            return f"The student {self.name} is already enrolled in {course.name}."
-            
     def __str__(self):
         if self.courses:
             courses_str = '\n'.join([course.name for course in self.courses])
-            message = f"This student is registered in:\n{courses_str}" 
+            message = f"{self.name} is registered in:\n{courses_str}" 
         else:
-            message = "This student isn't registered in any courses."
-        return (f"Student's name: {self.name}\nStudent's ID: {self.student_id}\n{message}")
+            message = "This person isn't registered in any courses."
+        return (f"Name: {self.name}\nID: {self.identifier}\n{message}")
+        
+    def register_course(self,course):
+        if course not in self.courses:
+            self.courses.append(course)
+            return f"{self.name} registered correctly in {course.name}."
+        else:
+            return f"{self.name} is already registered in {course.name}."
+
+class Student(Person):
+    def __init__(self,name,identifier):
+        super().__init__(name,identifier)
+        
+    def register_course(self,course):
+        msg = super().register_course(course)
+        if self not in course.students_registered:
+            course.students_registered.append(self)
+        return msg
+            
+    def __str__(self):
+        return f"STUDENT'S INFO:\n{super().__str__()}"
+        
+class Teacher(Person):
+    def __init__(self,name,identifier):
+        super().__init__(name,identifier)
+        
+    def __str__(self):
+        return f"TEACHER'S INFO:\n{super().__str__()}"
+    
+    def register_course(self,course):
+        return super().register_course(course)
         
 class Course():
     def __init__(self,name,code):
@@ -33,29 +55,11 @@ class Course():
             message = f"The students registered in this course are:\n{students_str}"
         else:
             message = "There are no students registered in this course."
-        return (f'Course name: {self.name}\nCourse code: {self.code}\n{message}')
-         
-class Teacher():
-    def __init__(self,full_name,teacher_id):
-        self.full_name = full_name
-        self.teacher_id = teacher_id
-        self.courses = []
-    
-    def teaches_in_course(self,course):
-        if course not in self.courses:
-            self.courses.append(course)
-            course.teacher = self
-            return f"Teacher {self.full_name} was registered correctly in {course.name}."
+        if self.teacher:
+            teacher_message = f"{self.teacher.name}"
         else:
-            return f"The teacher {self.full_name} already teaches in {course.name}."
-            
-    def __str__(self):
-        if self.courses:
-            courses_str = "\n".join([course.name for course in self.courses])
-            message = f"This teacher teaches in:\n{courses_str}"
-        else:
-            message = "This teacher doesn't teaches in any courses yet."
-        return (f"Teacher's name: {self.full_name}\nTeacher's id: {self.teacher_id}\n{message}")
+            teacher_message = f"No teacher assigned."
+        return (f'Course name: {self.name}\nCourse code: {self.code}\n{message}\nTeacher: {teacher_message}')
 
 class Grade():
     def __init__(self,student,course,grade):
@@ -74,16 +78,29 @@ class SchoolSystem():
         self.grades = []
         
     def add_student(self,student):
-        self.students.append(student)
-        
+        if student not in self.students:
+            self.students.append(student)
+        else:
+            print(f"{student.name} is already added.")
+         
     def add_course(self,course):
-        self.courses.append(course)
+        if course not in self.courses:
+            self.courses.append(course)
+        else:
+            print(f"{course.name} is already added.")
         
     def add_teacher(self,teacher):
-        self.teachers.append(teacher)
+        if teacher not in self.teachers:
+            self.teachers.append(teacher)
+        else:
+            print(f"{teacher.name} is already added.")
         
     def add_grade(self,grade):
-        self.grades.append(grade)
+        if grade not in self.grades:
+            self.grades.append(grade)
+        else:
+            print(f"{grade} is already added.")
+   
         
     def show_grades_for_student(self,student):
         grades_student = []
@@ -106,20 +123,8 @@ class SchoolSystem():
         self.show_avg(avg,course)
             
     def calculate_average(self,instance):
-        count = total = 0
-        for grade in self.grades:
-            if isinstance(instance,Student):
-                if grade.student == instance:
-                    total += grade.grade
-                    count += 1
-            elif isinstance(instance,Course):
-                if grade.course == instance:
-                    total += grade.grade
-                    count += 1
-        if count == 0:
-            return None
-        else:
-            return total / count
+        grades = [g.grade for g in self.grades if g.student == instance or g.course == instance]
+        return sum(grades) / len(grades) if grades else None
     
     def show_avg(self,avg,instance):
         if avg is None:
