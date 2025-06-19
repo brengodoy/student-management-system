@@ -77,17 +77,32 @@ class SchoolSystem():
         self.teachers = []
         self.grades = []
         
+    def create_student(self,name,identifier):
+        student = Student(name,identifier)
+        self.add_student(student)
+        return student
+        
     def add_student(self,student):
         if student not in self.students:
             self.students.append(student)
         else:
             print(f"{student.name} is already added.")
-         
+    
+    def create_course(self,name,code):
+        course = Course(name,code)
+        self.add_course(course)
+        return course        
+    
     def add_course(self,course):
         if course not in self.courses:
             self.courses.append(course)
-        else:
+        else: 
             print(f"{course.name} is already added.")
+        
+    def create_teacher(self,name,identifier):
+        teacher = Teacher(name,identifier)
+        self.add_teacher(teacher)
+        return teacher
         
     def add_teacher(self,teacher):
         if teacher not in self.teachers:
@@ -95,12 +110,16 @@ class SchoolSystem():
         else:
             print(f"{teacher.name} is already added.")
         
+    def create_grade(self,student,course,grade):
+        grade_var = Grade(student,course,grade)
+        self.add_grade(grade_var)
+        return grade_var
+        
     def add_grade(self,grade):
         if grade not in self.grades:
             self.grades.append(grade)
         else:
             print(f"{grade} is already added.")
-   
         
     def show_grades_for_student(self,student):
         grades_student = []
