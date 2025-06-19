@@ -44,3 +44,13 @@ grade1 = school.create_grade(student1, course1, 9.5)
 
 # Ver notas
 school.show_grades_for_student(student1)
+```
+
+
+## ✨ Tecnologías
+- Python 3.x
+- Paradigma de Programación Orientada a Objetos (OOP)
+
+## 👩‍💻 Sobre mí
+Este proyecto fue desarrollado por Brenda Godoy como parte de su camino en la programación, buscando aprender, mejorar y compartir su progreso con el mundo 🌍.
+Sígueme para más proyectos, y contenido tech 💖
